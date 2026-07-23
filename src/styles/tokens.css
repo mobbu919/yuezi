@@ -1,0 +1,77 @@
+/* ============================================================
+   DESIGN TOKENS
+   Centralized design variables for the Art Gallery site.
+   All spacing, color, typography, and layout values
+   are defined here so they can be changed in one place.
+   ============================================================ */
+
+:root {
+  /* ----- Colors ----- */
+  --color-bg: #FAFAF8;
+  --color-bg-alt: #F2F2F0;
+  --color-text: #222222;
+  --color-text-secondary: #666666;
+  --color-text-muted: #999999;
+  --color-border: #E5E5E5;
+  --color-border-light: #EFEFEF;
+  --color-accent: #222222;
+  --color-accent-hover: #444444;
+  --color-white: #FFFFFF;
+
+  /* ----- Typography ----- */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    Roboto, Helvetica, Arial, sans-serif;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+
+  --font-size-xs: 0.75rem;    /* 12px */
+  --font-size-sm: 0.875rem;   /* 14px */
+  --font-size-base: 1rem;     /* 16px */
+  --font-size-lg: 1.125rem;   /* 18px */
+  --font-size-xl: 1.5rem;     /* 24px */
+  --font-size-2xl: 2rem;      /* 32px */
+  --font-size-3xl: 3rem;      /* 48px */
+  --font-size-4xl: 4rem;      /* 64px */
+
+  --line-height-tight: 1.1;
+  --line-height-base: 1.6;
+  --line-height-relaxed: 1.8;
+
+  --letter-spacing-tight: -0.02em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.05em;
+
+  /* ----- Spacing ----- */
+  --spacing-2xs: 0.25rem;   /* 4px */
+  --spacing-xs: 0.5rem;     /* 8px */
+  --spacing-sm: 0.75rem;    /* 12px */
+  --spacing-md: 1rem;       /* 16px */
+  --spacing-lg: 1.5rem;     /* 24px */
+  --spacing-xl: 2rem;       /* 32px */
+  --spacing-2xl: 3rem;      /* 48px */
+  --spacing-3xl: 4rem;      /* 64px */
+  --spacing-4xl: 6rem;      /* 96px */
+  --spacing-5xl: 8rem;      /* 128px */
+
+  /* ----- Layout ----- */
+  --max-width: 1280px;
+  --max-width-narrow: 800px;
+  --content-padding: var(--spacing-xl);
+
+  /* ----- Transitions ----- */
+  --transition-fast: 0.2s ease;
+  --transition-base: 0.35s cubic-bezier(0.25, 0.1, 0.25, 1);
+  --transition-slow: 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
+
+  /* ----- Z-Index Scale ----- */
+  --z-nav: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+
+  /* ----- Breakpoints (for reference in comments) ----- */
+  /* --bp-sm: 640px; */
+  /* --bp-md: 768px; */
+  /* --bp-lg: 1024px; */
+  /* --bp-xl: 1280px; */
+}

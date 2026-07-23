@@ -1,0 +1,142 @@
+---
+/**
+ * Hero — Full-viewport hero section with background image,
+ *        title, subtitle, and CTA button.
+ *
+ * Props:
+ *   title        — Main headline (default: "Yuezi Gallery")
+ *   subtitle     — Supporting text / tagline
+ *   ctaText      — Call-to-action button label (default: "Explore")
+ *   ctaHref      — CTA link target (default: "/gallery")
+ *   imageUrl     — Background image URL
+ *   imageAlt     — Background image alt text
+ *   fullHeight   — Whether hero should fill viewport height (default: true)
+ */
+
+export interface Props {
+  title?: string;
+  subtitle?: string;
+  ctaText?: string;
+  ctaHref?: string;
+  imageUrl?: string;
+  imageAlt?: string;
+  fullHeight?: boolean;
+}
+
+const {
+  title = 'Yuezi Gallery',
+  subtitle = 'A curated space for visual stories and quiet impressions',
+  ctaText = 'Explore',
+  ctaHref = '/gallery',
+  imageUrl = 'https://picsum.photos/seed/hero/1600/900',
+  imageAlt = 'Gallery hero background',
+  fullHeight = true,
+} = Astro.props;
+---
+
+<section class="hero" data-full-height={fullHeight}>
+  <div class="hero-image-wrapper">
+    <img
+      src={imageUrl}
+      alt={imageAlt}
+      class="hero-image"
+      loading="eager"
+      decoding="async"
+      fetchpriority="high"
+    />
+    <div class="hero-overlay"></div>
+  </div>
+  <div class="hero-content">
+    <h1 class="hero-title">{title}</h1>
+    {subtitle && <p class="hero-subtitle">{subtitle}</p>}
+    <a href={ctaHref} class="btn hero-cta">{ctaText}</a>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .hero[data-full-height="true"] {
+    min-height: 90vh;
+  }
+
+  .hero[data-full-height="false"] {
+    min-height: 60vh;
+  }
+
+  /* Background Image */
+  .hero-image-wrapper {
+    position: absolute;
+    inset: 0;
+  }
+
+  .hero-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  .hero-overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(
+      to bottom,
+      rgba(250, 250, 248, 0.15) 0%,
+      rgba(250, 250, 248, 0.6) 100%
+    );
+  }
+
+  /* Content */
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    max-width: 640px;
+    padding: var(--spacing-xl);
+    animation: heroFadeIn 1s cubic-bezier(0.25, 0.1, 0.25, 1) forwards;
+  }
+
+  .hero-title {
+    font-size: var(--font-size-3xl);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-tight);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .hero-subtitle {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  @keyframes heroFadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (min-width: 768px) {
+    .hero-title {
+      font-size: var(--font-size-4xl);
+    }
+
+    .hero-subtitle {
+      font-size: var(--font-size-xl);
+    }
+  }
+</style>

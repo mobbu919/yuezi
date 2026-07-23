@@ -1,0 +1,156 @@
+---
+/**
+ * About page — Artist biography, avatar, and contact information.
+ * Uses a real image from the collection for the avatar.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import { galleryData } from '../data/gallery';
+
+// Import all images to pick one for the avatar
+const imageGlob = import.meta.glob<{ default: string }>(
+  '../assets/images/art-*.jpg',
+  { eager: true, query: '?url' }
+);
+const imageByFile = new Map<string, string>();
+for (const [filepath, mod] of Object.entries(imageGlob)) {
+  const filename = filepath.split('/').pop() || '';
+  imageByFile.set(filename, mod.default);
+}
+// Use a mid-range image for the avatar
+const avatarFile = galleryData[25]?.file || 'art-01.jpg';
+const avatarImageUrl = imageByFile.get(avatarFile) || '';
+---
+
+<BaseLayout
+  title="About"
+  description="Learn about the artist behind Yuezi Gallery — background, practice, and contact."
+>
+  <section class="section about-section">
+    <div class="container-narrow">
+      <div class="about-avatar-wrapper reveal">
+        <img
+          src={avatarImageUrl}
+          alt="Artist portrait"
+          class="about-avatar"
+          loading="lazy"
+          decoding="async"
+        />
+      </div>
+
+      <div class="reveal">
+        <SectionTitle
+          label="Biography"
+          title="About the Artist"
+          description=""
+          align="center"
+        />
+      </div>
+
+      <div class="about-content reveal reveal-delay-1">
+        <p class="about-text">
+          Based between light and shadow, the artist works across photography,
+          painting, and mixed media to explore the quiet spaces between things —
+          the pause before a word, the corner of a room at dusk, the way a surface
+          holds memory. Spanning over {galleryData[galleryData.length - 1].year - galleryData[0].year} years of practice, this
+          collection includes {galleryData.length} individual works captured since {galleryData[0].year}.
+        </p>
+        <p class="about-text">
+          With a background in visual communication and a longstanding fascination
+          with minimal forms, the practice centers on attention: looking closely
+          at what most pass by, and translating that attention into images that
+          feel both familiar and strange.
+        </p>
+      </div>
+
+      <hr class="divider reveal" />
+
+      <div class="reveal">
+        <SectionTitle
+          label="Contact"
+          title="Get in Touch"
+          description=""
+          align="center"
+        />
+      </div>
+
+      <div class="about-contact reveal reveal-delay-1">
+        <p class="about-text about-contact-text">
+          For inquiries, commissions, or collaboration opportunities, please reach out.
+        </p>
+        <div class="contact-placeholder">
+          <span class="contact-label">Email</span>
+          <span class="contact-value text-muted">hello@yuezigallery.com</span>
+        </div>
+        <div class="contact-placeholder">
+          <span class="contact-label">Studio</span>
+          <span class="contact-value text-muted">Shanghai, China</span>
+        </div>
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .about-section {
+    padding-top: var(--spacing-4xl);
+    padding-bottom: var(--spacing-5xl);
+  }
+
+  .about-avatar-wrapper {
+    width: 160px;
+    height: 160px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin: 0 auto var(--spacing-3xl);
+  }
+
+  .about-avatar {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .about-content {
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .about-text {
+    font-size: var(--font-size-base);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .about-text:last-child {
+    margin-bottom: 0;
+  }
+
+  .about-contact {
+    text-align: center;
+  }
+
+  .about-contact-text {
+    margin-bottom: var(--spacing-2xl);
+  }
+
+  .contact-placeholder {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: var(--spacing-md);
+    margin-bottom: var(--spacing-md);
+    font-size: var(--font-size-sm);
+  }
+
+  .contact-label {
+    font-weight: var(--font-weight-medium);
+    color: var(--color-text);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  .contact-value {
+    text-align: left;
+  }
+</style>

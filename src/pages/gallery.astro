@@ -1,0 +1,102 @@
+---
+/**
+ * Gallery page — Full gallery grid with all exhibited works.
+ * Uses import.meta.glob (Vite) to dynamically import all images.
+ * Combined with metadata from the gallery data file.
+ *
+ * To add new artwork:
+ *   1. Place a JPG in src/assets/images/art-XX.jpg
+ *   2. Add an entry to src/data/gallery.js
+ *   3. Rebuild — the glob will pick it up automatically
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import SectionTitle from '../components/SectionTitle.astro';
+import GalleryCard from '../components/GalleryCard.astro';
+import { galleryData } from '../data/gallery';
+
+// Dynamically import all artwork images using Vite's import.meta.glob.
+// Returns { path: { default: "/_assets/art-XX.hash.jpg" } }
+const imageGlob = import.meta.glob<{ default: string }>(
+  '../assets/images/art-*.jpg',
+  { eager: true, query: '?url' }
+);
+
+// Build a lookup: filename -> processed image URL
+const imageByFile = new Map<string, string>();
+for (const [filepath, mod] of Object.entries(imageGlob)) {
+  const filename = filepath.split('/').pop() || '';
+  imageByFile.set(filename, mod.default);
+}
+---
+
+<BaseLayout
+  title="Gallery"
+  description="Explore the full collection — {galleryData.length} works spanning {galleryData[0].year} to {galleryData[galleryData.length-1].year}."
+>
+  <!-- Page Header -->
+  <section class="section page-header">
+    <div class="container">
+      <div class="reveal">
+        <SectionTitle
+          label={`Exhibition — ${galleryData.length} Works`}
+          title="Gallery"
+          description={`A curated collection spanning from ${galleryData[0].date.toLowerCase()} to ${galleryData[galleryData.length-1].date.toLowerCase()}.`}
+          align="left"
+        />
+      </div>
+    </div>
+  </section>
+
+  <!-- Gallery Grid -->
+  <section class="section gallery-section">
+    <div class="container">
+      <div class="gallery-grid">
+        {galleryData.map((item, index) => {
+          const imageUrl = imageByFile.get(item.file) || '';
+          const title = item.date;
+          const categories = ['Photography', 'Still Life', 'Landscape', 'Abstract', 'Portrait', 'Architecture', 'Street', 'Nature'];
+          const category = categories[index % categories.length];
+          return (
+            <div class={`reveal reveal-delay-${(index % 4) + 1}`}>
+              <GalleryCard
+                imageUrl={imageUrl}
+                imageAlt={`Artwork ${item.id} — ${item.date}`}
+                title={title}
+                category={category}
+                description={`Captured in ${item.date}.`}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .page-header {
+    padding-bottom: 0;
+  }
+
+  .gallery-section {
+    padding-top: var(--spacing-2xl);
+  }
+
+  .gallery-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  @media (min-width: 640px) {
+    .gallery-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .gallery-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

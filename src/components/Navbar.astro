@@ -1,0 +1,275 @@
+---
+/**
+ * Navbar — Responsive navigation bar with mobile hamburger menu.
+ *
+ * Features:
+ *   - Sticky top navigation
+ *   - Mobile hamburger toggle with overlay
+ *   - Active link highlighting based on current path
+ *   - Smooth scroll for anchor links
+ */
+
+import { Astro } from 'astro';
+
+export interface NavLink {
+  href: string;
+  label: string;
+}
+
+const navLinks: NavLink[] = [
+  { href: '/', label: 'Home' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/about', label: 'About' },
+];
+
+// Normalize trailing slash so active-link matching works on every page.
+const currentPath = Astro.url.pathname.replace(/\/+$/, '') || '/';
+---
+
+<header class="navbar" role="banner">
+  <nav class="navbar-inner container" role="navigation" aria-label="Main navigation">
+    <!-- Logo / Site Name -->
+    <a href="/" class="navbar-logo" aria-label="Home page">
+      Yuezi Gallery
+    </a>
+
+    <!-- Desktop Links -->
+    <ul class="navbar-links" role="list">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={{
+              'navbar-link': true,
+              'is-active': currentPath === link.href,
+            }}
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+
+    <!-- Mobile Menu Toggle -->
+    <button class="navbar-toggle" aria-label="Toggle menu" aria-expanded="false" data-toggle>
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+      <span class="toggle-bar"></span>
+    </button>
+  </nav>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="navbar-overlay" data-overlay hidden>
+    <ul class="navbar-mobile-links" role="list">
+      {navLinks.map((link) => (
+        <li>
+          <a
+            href={link.href}
+            class:list={{
+              'navbar-mobile-link': true,
+              'is-active': currentPath === link.href,
+            }}
+            data-nav-link
+          >
+            {link.label}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</header>
+
+<script>
+  /**
+   * Mobile navigation toggle using vanilla JS.
+   * No dependencies, minimal footprint.
+   */
+  const toggleBtn = document.querySelector('[data-toggle]');
+  const overlay = document.querySelector('[data-overlay]');
+  const navLinks = document.querySelectorAll('[data-nav-link]');
+  const body = document.body;
+
+  if (toggleBtn && overlay) {
+    const openMenu = () => {
+      toggleBtn.setAttribute('aria-expanded', 'true');
+      overlay.removeAttribute('hidden');
+      body.style.overflow = 'hidden';
+    };
+
+    const closeMenu = () => {
+      toggleBtn.setAttribute('aria-expanded', 'false');
+      overlay.setAttribute('hidden', '');
+      body.style.overflow = '';
+    };
+
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = toggleBtn.getAttribute('aria-expanded') === 'true';
+      isOpen ? closeMenu() : openMenu();
+    });
+
+    // Close menu on link click
+    navLinks.forEach((link) => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // Close menu on Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  }
+</script>
+
+<style>
+  .navbar {
+    position: sticky;
+    top: 0;
+    z-index: var(--z-nav);
+    background: var(--color-bg);
+    border-bottom: 1px solid var(--color-border-light);
+  }
+
+  .navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  /* Logo */
+  .navbar-logo {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-tight);
+    color: var(--color-text);
+    transition: opacity var(--transition-fast);
+  }
+
+  .navbar-logo:hover {
+    opacity: 0.6;
+    color: var(--color-text);
+  }
+
+  /* Desktop Links */
+  .navbar-links {
+    display: none;
+    align-items: center;
+    gap: var(--spacing-xl);
+  }
+
+  .navbar-link {
+    font-size: var(--font-size-sm);
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+    position: relative;
+    padding: var(--spacing-xs) 0;
+  }
+
+  .navbar-link::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0;
+    height: 1px;
+    background: var(--color-text);
+    transition: width var(--transition-base);
+  }
+
+  .navbar-link:hover {
+    color: var(--color-text);
+  }
+
+  .navbar-link:hover::after,
+  .navbar-link.is-active::after {
+    width: 100%;
+  }
+
+  .navbar-link.is-active {
+    color: var(--color-text);
+  }
+
+  /* Hamburger Toggle */
+  .navbar-toggle {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    padding: var(--spacing-xs);
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  .toggle-bar {
+    display: block;
+    width: 22px;
+    height: 1px;
+    background: var(--color-text);
+    transition: transform var(--transition-base);
+  }
+
+  .navbar-toggle[aria-expanded="true"] .toggle-bar:nth-child(1) {
+    transform: translateY(6px) rotate(45deg);
+  }
+
+  .navbar-toggle[aria-expanded="true"] .toggle-bar:nth-child(2) {
+    opacity: 0;
+  }
+
+  .navbar-toggle[aria-expanded="true"] .toggle-bar:nth-child(3) {
+    transform: translateY(-6px) rotate(-45deg);
+  }
+
+  /* Mobile Overlay */
+  .navbar-overlay {
+    position: fixed;
+    top: 64px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: var(--color-bg);
+    z-index: var(--z-overlay);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.3s ease;
+  }
+
+  .navbar-overlay[hidden] {
+    display: none;
+  }
+
+  .navbar-mobile-links {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--spacing-2xl);
+  }
+
+  .navbar-mobile-link {
+    font-size: var(--font-size-2xl);
+    font-weight: var(--font-weight-normal);
+    color: var(--color-text-secondary);
+    transition: color var(--transition-fast);
+  }
+
+  .navbar-mobile-link:hover,
+  .navbar-mobile-link.is-active {
+    color: var(--color-text);
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+
+  /* Desktop breakpoint */
+  @media (min-width: 768px) {
+    .navbar-links {
+      display: flex;
+    }
+
+    .navbar-toggle {
+      display: none;
+    }
+  }
+</style>

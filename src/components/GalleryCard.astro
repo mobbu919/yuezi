@@ -1,0 +1,151 @@
+---
+/**
+ * GalleryCard — A single card in the gallery grid.
+ *
+ * Props:
+ *   imageUrl    — Image URL for the card
+ *   imageAlt    — Alt text for the image
+ *   title       — Artwork / piece title
+ *   category    — Category label (e.g. "Photography", "Painting")
+ *   description — Short description or artist note
+ *   href        — Optional detail page link
+ *   aspectRatio — Image aspect ratio (default: "4/3")
+ */
+
+export interface Props {
+  imageUrl: string;
+  imageAlt: string;
+  title: string;
+  category: string;
+  description: string;
+  href?: string;
+  aspectRatio?: string;
+}
+
+const {
+  imageUrl,
+  imageAlt,
+  title,
+  category,
+  description,
+  href,
+  aspectRatio = '4/3',
+} = Astro.props;
+
+const Tag = href ? 'a' : 'article';
+---
+
+<Tag
+  class="gallery-card"
+  {...(href ? { href, 'aria-label': `View details: ${title}` } : {})}
+>
+  <div class="card-image-wrapper" style={`aspect-ratio: ${aspectRatio}`}>
+    <img
+      src={imageUrl}
+      alt={imageAlt}
+      class="card-image"
+      loading="lazy"
+      decoding="async"
+    />
+    <div class="card-image-overlay">
+      <span class="card-view-label">View</span>
+    </div>
+  </div>
+  <div class="card-body">
+    <span class="card-category">{category}</span>
+    <h3 class="card-title">{title}</h3>
+    <p class="card-description">{description}</p>
+  </div>
+</Tag>
+
+<style>
+  .gallery-card {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+
+  /* Image Container */
+  .card-image-wrapper {
+    position: relative;
+    overflow: hidden;
+    margin-bottom: var(--spacing-md);
+    background: var(--color-bg-alt);
+  }
+
+  .card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
+    will-change: transform;
+  }
+
+  .gallery-card:hover .card-image,
+  .gallery-card:focus-visible .card-image {
+    transform: scale(1.05);
+  }
+
+  /* Image Overlay on Hover */
+  .card-image-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background var(--transition-base);
+  }
+
+  .gallery-card:hover .card-image-overlay,
+  .gallery-card:focus-visible .card-image-overlay {
+    background: rgba(0, 0, 0, 0.03);
+  }
+
+  .card-view-label {
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-white);
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity var(--transition-base), transform var(--transition-base);
+  }
+
+  .gallery-card:hover .card-view-label,
+  .gallery-card:focus-visible .card-view-label {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  /* Card Body */
+  .card-body {
+    padding: 0;
+  }
+
+  .card-category {
+    display: inline-block;
+    font-size: var(--font-size-xs);
+    font-weight: var(--font-weight-medium);
+    letter-spacing: var(--letter-spacing-wide);
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+    margin-bottom: var(--spacing-2xs);
+  }
+
+  .card-title {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-normal);
+    line-height: var(--line-height-tight);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
+  }
+
+  .card-description {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-base);
+    color: var(--color-text-secondary);
+  }
+</style>

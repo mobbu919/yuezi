@@ -1,0 +1,68 @@
+---
+/**
+ * SectionTitle — A reusable section heading component.
+ *
+ * Props:
+ *   label       — Optional overline label (e.g. "Category")
+ *   title       — Section heading text
+ *   description — Optional subtitle / supporting text
+ *   align       — Text alignment: "left" | "center" (default: "center")
+ *   narrow      — Whether to constrain width (default: true)
+ */
+
+export interface Props {
+  label?: string;
+  title: string;
+  description?: string;
+  align?: 'left' | 'center';
+  narrow?: boolean;
+}
+
+const { label, title, description, align = 'center', narrow = true } = Astro.props;
+---
+
+<div class="section-title" data-align={align}>
+  {label && <span class="label">{label}</span>}
+  <h2 class="heading-2 title">{title}</h2>
+  {description && (
+    <p class="body-text description">{description}</p>
+  )}
+</div>
+
+<style>
+  .section-title {
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .section-title[data-align="center"] {
+    text-align: center;
+  }
+
+  .section-title[data-align="left"] {
+    text-align: left;
+  }
+
+  .section-title .label {
+    display: inline-block;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .section-title .title {
+    margin-bottom: var(--spacing-lg);
+  }
+
+  .section-title[data-align="center"] .title {
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  .section-title .description {
+    max-width: 520px;
+  }
+
+  .section-title[data-align="center"] .description {
+    margin-left: auto;
+    margin-right: auto;
+  }
+</style>

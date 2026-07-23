@@ -1,0 +1,105 @@
+---
+/**
+ * BaseLayout — The root layout wrapper for all pages.
+ *
+ * Provides:
+ *   - HTML document shell with lang="en"
+ *   - SEO metadata (title, description, Open Graph)
+ *   - Google Fonts (Inter) preconnect and preload
+ *   - Global CSS import
+ *   - Scroll reveal IntersectionObserver script
+ *   - Navbar and Footer
+ *
+ * Props:
+ *   title       — Page title (appended with " | Yuezi Gallery")
+ *   description — Meta description for SEO
+ *   ogImage     — Open Graph image URL
+ *   canonical   — Canonical URL (defaults to current page URL)
+ */
+import Navbar from '../components/Navbar.astro';
+import Footer from '../components/Footer.astro';
+
+// Import global styles so Astro/Vite bundles them into the build output.
+import '../styles/global.css';
+
+export interface Props {
+  title: string;
+  description?: string;
+  ogImage?: string;
+  canonical?: string;
+}
+
+const {
+  title,
+  description = 'Yuezi Gallery — A curated space for visual stories and quiet impressions.',
+  ogImage = 'https://picsum.photos/seed/og/1200/630',
+  canonical,
+} = Astro.props;
+
+const pageTitle = `${title} — Yuezi Gallery`;
+const canonicalUrl = canonical ?? Astro.url.href;
+---
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{pageTitle}</title>
+  <meta name="description" content={description} />
+  <link rel="canonical" href={canonicalUrl} />
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content={pageTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={ogImage} />
+  <meta property="og:url" content={canonicalUrl} />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content={pageTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={ogImage} />
+
+  <!-- Google Fonts: Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- Favicon (inline SVG) -->
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>◯</text></svg>" />
+</head>
+<body>
+  <Navbar />
+  <main id="main-content">
+    <slot />
+  </main>
+  <Footer />
+
+  <!-- Scroll Reveal Script -->
+  <script>
+    (function initScrollReveal() {
+      if (!('IntersectionObserver' in window)) return;
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.15, rootMargin: '0px 0px -40px 0px' }
+      );
+      document.querySelectorAll('.reveal').forEach((el) => {
+        observer.observe(el);
+      });
+    })();
+  </script>
+</body>
+</html>
+<style>
+  #main-content {
+    min-height: calc(100vh - 64px - 120px);
+  }
+</style>
