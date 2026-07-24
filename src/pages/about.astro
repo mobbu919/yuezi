@@ -11,13 +11,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import { galleryData } from '../data/gallery';
 
-// Import the custom avatar image
-import avatarSrc from '../assets/images/avatar.jpg';
+// Import avatar with ?url so Astro returns a plain string path
+import avatarSrc from '../assets/images/avatar.jpg?url';
 ---
 
 <BaseLayout
   title="About"
-  description="Learn about the artist behind Yuezi Gallery — background, practice, and contact."
+  description="Learn about the artist behind Yuezi Gallery — background and practice."
 >
   <section class="section about-section">
     <div class="container-narrow">
@@ -45,14 +45,14 @@ import avatarSrc from '../assets/images/avatar.jpg';
 
       <div class="about-content reveal reveal-delay-1">
         <p class="about-text">
-          Based between light and shadow, the artist works across photography,
-          painting, and mixed media to explore the quiet spaces between things —
-          the pause before a word, the corner of a room at dusk, the way a surface
-          holds memory. Spanning over {galleryData[galleryData.length - 1].year - galleryData[0].year} years of practice, this
-          collection includes {galleryData.length} individual works captured since {galleryData[0].year}.
+          Yuezi is a painter working across oil, acrylic, and mixed media to explore
+          the quiet spaces between colour and form — the pause before a stroke,
+          the texture of a surface at dusk, the way pigment holds memory.
+          Spanning over {galleryData[galleryData.length - 1].year - galleryData[0].year} years of practice, this
+          collection includes {galleryData.length} individual works created since {galleryData[0].year}.
         </p>
         <p class="about-text">
-          With a background in visual communication and a longstanding fascination
+          With a background in fine arts and a longstanding fascination
           with minimal forms, the practice centers on attention: looking closely
           at what most pass by, and translating that attention into images that
           feel both familiar and strange.
@@ -80,7 +80,7 @@ import avatarSrc from '../assets/images/avatar.jpg';
         </div>
         <div class="contact-placeholder">
           <span class="contact-label">Studio</span>
-          <span class="contact-value text-muted">Shanghai, China</span>
+          <span class="contact-value text-muted">Chengdu, China</span>
         </div>
       </div>
     </div>
