@@ -1,25 +1,18 @@
 ---
 /**
  * About page — Artist biography, avatar, and contact information.
- * Uses a real image from the collection for the avatar.
+ * Uses a custom avatar image from src/assets/images/avatar.jpg.
+ *
+ * To change the avatar:
+ *   - Place a new image at src/assets/images/avatar.jpg
+ *   - Rebuild
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import { galleryData } from '../data/gallery';
 
-// Import all images to pick one for the avatar
-const imageGlob = import.meta.glob<{ default: string }>(
-  '../assets/images/art-*.jpg',
-  { eager: true, query: '?url' }
-);
-const imageByFile = new Map<string, string>();
-for (const [filepath, mod] of Object.entries(imageGlob)) {
-  const filename = filepath.split('/').pop() || '';
-  imageByFile.set(filename, mod.default);
-}
-// Use a mid-range image for the avatar
-const avatarFile = galleryData[25]?.file || 'art-01.jpg';
-const avatarImageUrl = imageByFile.get(avatarFile) || '';
+// Import the custom avatar image
+import avatarSrc from '../assets/images/avatar.jpg';
 ---
 
 <BaseLayout
@@ -28,11 +21,14 @@ const avatarImageUrl = imageByFile.get(avatarFile) || '';
 >
   <section class="section about-section">
     <div class="container-narrow">
+      <!-- Avatar -->
       <div class="about-avatar-wrapper reveal">
         <img
-          src={avatarImageUrl}
+          src={avatarSrc}
           alt="Artist portrait"
           class="about-avatar"
+          width="400"
+          height="400"
           loading="lazy"
           decoding="async"
         />

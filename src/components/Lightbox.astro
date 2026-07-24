@@ -1,0 +1,183 @@
+---
+/**
+ * Lightbox — Fullscreen image preview overlay.
+ *
+ * Usage:
+ *   Wrap any element with data-lightbox="true" to make it clickable.
+ *   The image source is read from the nearest <img> inside the element.
+ *   Alternatively, set data-src="https://..." for a custom source.
+ *
+ *   <div data-lightbox="true">
+ *     <img src="..." alt="..." />
+ *   </div>
+ *
+ * Features:
+ *   - Click/tap to open fullscreen preview
+ *   - Esc key to close
+ *   - Click outside image to close
+ *   - Close button
+ *   - Smooth fade-in/out
+ *   - Accessible ARIA attributes
+ */
+---
+
+<div id="lightbox" class="lightbox" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Image preview">
+  <div class="lightbox-overlay" data-lightbox-close></div>
+  <div class="lightbox-content">
+    <button class="lightbox-close" data-lightbox-close aria-label="Close preview">
+      <span class="lightbox-close-icon" aria-hidden="true">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+        </svg>
+      </span>
+    </button>
+    <img class="lightbox-image" src="" alt="" />
+  </div>
+</div>
+
+<script>
+  (function () {
+    const lightbox = document.getElementById('lightbox');
+    if (!lightbox) return;
+
+    const lightboxImg = lightbox.querySelector('.lightbox-image');
+    const body = document.body;
+
+    /** Open the lightbox with a given image URL and alt text. */
+    const openLightbox = (src, alt) => {
+      lightboxImg.src = src;
+      lightboxImg.alt = alt || 'Image preview';
+      lightbox.classList.add('is-open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      body.style.overflow = 'hidden';
+    };
+
+    /** Close the lightbox. */
+    const closeLightbox = () => {
+      lightbox.classList.remove('is-open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      body.style.overflow = '';
+      // Clear the src after transition ends to free memory
+      setTimeout(() => { lightboxImg.src = ''; }, 300);
+    };
+
+    // Bind click handlers to all elements with data-lightbox
+    const bindTriggers = () => {
+      document.querySelectorAll('[data-lightbox]').forEach((el) => {
+        el.addEventListener('click', (e) => {
+          // If the element itself or data-src provides a URL, use it.
+          const src = el.dataset.src || el.querySelector('img')?.src;
+          if (src) {
+            const alt = el.querySelector('img')?.alt || '';
+            openLightbox(src, alt);
+          }
+        });
+      });
+    };
+
+    // Close on overlay/button click
+    lightbox.querySelectorAll('[data-lightbox-close]').forEach((el) => {
+      el.addEventListener('click', closeLightbox);
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && lightbox.classList.contains('is-open')) {
+        closeLightbox();
+      }
+    });
+
+    // Initial bind
+    bindTriggers();
+
+    // Re-bind when Astro swaps content (for view transitions if used later)
+    document.addEventListener('astro:page-load', bindTriggers);
+  })();
+</script>
+
+<style>
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal, 300);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .lightbox.is-open {
+    opacity: 1;
+    pointer-events: all;
+  }
+
+  .lightbox-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.85);
+  }
+
+  .lightbox-content {
+    position: relative;
+    z-index: 1;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .lightbox-image {
+    max-width: 100%;
+    max-height: 85vh;
+    object-fit: contain;
+    border-radius: 2px;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    transform: scale(0.95);
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+
+  .lightbox.is-open .lightbox-image {
+    transform: scale(1);
+  }
+
+  .lightbox-close {
+    position: absolute;
+    top: -40px;
+    right: 0;
+    background: none;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 8px;
+    opacity: 0.7;
+    transition: opacity 0.2s ease;
+  }
+
+  .lightbox-close:hover {
+    opacity: 1;
+  }
+
+  .lightbox-close-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  @media (max-width: 640px) {
+    .lightbox-content {
+      max-width: 95vw;
+      max-height: 80vh;
+    }
+
+    .lightbox-image {
+      max-height: 80vh;
+    }
+
+    .lightbox-close {
+      top: -36px;
+    }
+  }
+</style>

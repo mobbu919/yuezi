@@ -1,27 +1,19 @@
 ---
 /**
- * Gallery page — Full gallery grid with all exhibited works.
- * Uses import.meta.glob (Vite) to dynamically import all images.
- * Combined with metadata from the gallery data file.
- *
- * To add new artwork:
- *   1. Place a JPG in src/assets/images/art-XX.jpg
- *   2. Add an entry to src/data/gallery.js
- *   3. Rebuild — the glob will pick it up automatically
+ * Gallery page — Full gallery grid with image preview (lightbox).
+ * Each card triggers a fullscreen lightbox on click.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import GalleryCard from '../components/GalleryCard.astro';
+import Lightbox from '../components/Lightbox.astro';
 import { galleryData } from '../data/gallery';
 
-// Dynamically import all artwork images using Vite's import.meta.glob.
-// Returns { path: { default: "/_assets/art-XX.hash.jpg" } }
+// Dynamically import all artwork images
 const imageGlob = import.meta.glob<{ default: string }>(
   '../assets/images/art-*.jpg',
   { eager: true, query: '?url' }
 );
-
-// Build a lookup: filename -> processed image URL
 const imageByFile = new Map<string, string>();
 for (const [filepath, mod] of Object.entries(imageGlob)) {
   const filename = filepath.split('/').pop() || '';
@@ -57,7 +49,7 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
           const categories = ['Photography', 'Still Life', 'Landscape', 'Abstract', 'Portrait', 'Architecture', 'Street', 'Nature'];
           const category = categories[index % categories.length];
           return (
-            <div class={`reveal reveal-delay-${(index % 4) + 1}`}>
+            <div class={`reveal reveal-delay-${(index % 4) + 1}`} data-lightbox="true">
               <GalleryCard
                 imageUrl={imageUrl}
                 imageAlt={`Artwork ${item.id} — ${item.date}`}
@@ -71,6 +63,9 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
       </div>
     </div>
   </section>
+
+  <!-- Lightbox overlay for image preview -->
+  <Lightbox />
 </BaseLayout>
 
 <style>
