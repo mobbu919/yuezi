@@ -1,0 +1,75 @@
+Text Annotations Report
+============================================================
+Generated: 2026-07-25 18:41
+
+Total images with detected text: 23
+
+art-01 (2021-09-11 075604.jpg):
+  OCR failed - see text_annotations/art-01_text.jpg
+
+art-02 (2022-03-16 154218.jpg):
+  OCR text: 4 wif 7 i Ht a 7
+
+art-03 (2022-03-16 154549.jpg):
+  OCR text: RE Sap Be Z nad a 4 Uy LOB? : op ge VL GR ES. Lo Bo hy “7
+
+art-05 (2022-10-27 202014.jpg):
+  OCR failed - see text_annotations/art-05_text.jpg
+
+art-06 (2022-10-27 202322.jpg):
+  OCR failed - see text_annotations/art-06_text.jpg
+
+art-08 (2022-11-01 172622.jpg):
+  OCR text: ANY Re oe
+
+art-09 (2022-11-12 110126.jpg):
+  OCR failed - see text_annotations/art-09_text.jpg
+
+art-10 (2024-02-06 232824.jpg):
+  OCR failed - see text_annotations/art-10_text.jpg
+
+art-29 (2024-05-17 173909.jpg):
+  OCR failed - see text_annotations/art-29_text.jpg
+
+art-30 (2024-06-22 225416.jpg):
+  OCR failed - see text_annotations/art-30_text.jpg
+
+art-32 (2024-08-08 215653.jpg):
+  OCR failed - see text_annotations/art-32_text.jpg
+
+art-33 (2024-08-09 132022.jpg):
+  OCR text: : AR SSR nasi te RAR SANUS Crs OCORNE No : ares ee RRS RR ere ate: POR : Shhh nee ‘ hit ee ree es ene: x ee ‘ Tear tebe RET : BRIS Sa! : ; TS Shaw a gS wets . : i Pome wyeig hnrere: wet eier og R an ere eet ad plcsierrens fecaecist a “PRA : Wie yee Sy aS St Nase Ce RE Oa Ueto a ERS Se Ses * Cees SCANS ae SAN SSS ba eats SS : Pear OE Satna <n ee zs : ; er : f Soe ames Seuret Seen : 8 feRpOnre ny = pared is Be Ices eS eae : : Line 2 Apa Ne One ty tated _ a . ! eee ie Perera — o> he he dcs + ~. <a Z “ : ° wat RR TEN PS UCTS ‘ i Saat pede ee: oo) IRSA Gee ete CLES : ees mee Be NET EERIE ae or ERS 5 RUS >. «: : Pine Sree ee ‘ OMIRR ROSES SS SEB SS : pinnae i Yt : snc anes. x rae rer : Mek rahca eae ernete r a Kectarapriaon SARS ey we : TANT toeta sera estate ster MARA eprereienerccts : WOE gets aie Reon yok) ToNeenehe Ss oie Reece TRL 1 ee tes : : + > . ees ewe ose? im wo SAS ET, Byram Pe wos : : Roe : : ices ee i SNA ar ee eer etre Lace Ra ee ee KAN = For or a ete BE SER S = SV ese FERN SERAESESS CNA 4 =~ cpanel ea Eon asc cehy cor aS gern Ropes celle iret rwe : eee a OP ictecees deh Bederat th meee nt > Lee Ae ea ey 20 Sa SON Reena se = States) Sees oe = SN aon TS es acts See HSER ine, Te ryan enn ee hao we wey Se eakgel ters eer SE eo Pe I NS ent. he AER oar ete! ea See gears Sates eed ne YON Shy S: St Aghsdnn ciate tere rea) or pala lat See opiniones Bag one “ar i Nad eae geeaetp anno ;, ¢ SO EP ae aN ae ay A ripeness ae oF: at 4 ds OSES ape, cnt CSE poe tC Le 1 EER ere e Yk ne re ny aan Uy ' DOO at ST SN = ee oe ee oS SS ion TILA ao pe aen TES HAA ONAN as $ BC fee mh : . ee ot oe . ; NTS es Jeg penne « - : preenceest: ~ ; BERET ae : Se . ea eeraetrenes Eg 3k Seat By Saas oes, SSG c og Pee TEER ANS Yo yee nparer snes Se Scestaae ty
+
+art-48 (2025-01-19 203858.jpg):
+  OCR failed - see text_annotations/art-48_text.jpg
+
+art-49 (2025-02-23 205525.jpg):
+  OCR failed - see text_annotations/art-49_text.jpg
+
+art-53 (2025-03-21 210301.jpg):
+  OCR failed - see text_annotations/art-53_text.jpg
+
+art-54 (2025-03-30 182841.jpg):
+  OCR failed - see text_annotations/art-54_text.jpg
+
+art-56 (2025-04-05 115532.jpg):
+  OCR failed - see text_annotations/art-56_text.jpg
+
+art-60 (2025-07-13 172734.jpg):
+  OCR text: a of ! ca)
+
+art-62 (IMG_20260724_014412.jpg):
+  OCR failed - see text_annotations/art-62_text.jpg
+
+art-63 (IMG_20260724_014456.jpg):
+  OCR failed - see text_annotations/art-63_text.jpg
+
+art-64 (IMG_20260724_014544.jpg):
+  OCR failed - see text_annotations/art-64_text.jpg
+
+art-65 (IMG_20260724_014640.jpg):
+  OCR failed - see text_annotations/art-65_text.jpg
+
+art-66 (IMG_20260724_014700.jpg):
+  OCR failed - see text_annotations/art-66_text.jpg
+

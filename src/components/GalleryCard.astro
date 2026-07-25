@@ -1,17 +1,4 @@
 ---
-/**
- * GalleryCard — A single card in the gallery grid.
- *
- * Props:
- *   imageUrl    — Image URL for the card
- *   imageAlt    — Alt text for the image
- *   title       — Artwork / piece title
- *   category    — Category label (e.g. "Photography", "Painting")
- *   description — Short description or artist note
- *   href        — Optional detail page link
- *   aspectRatio — Image aspect ratio (default: "4/3")
- */
-
 export interface Props {
   imageUrl: string;
   imageAlt: string;
@@ -19,7 +6,6 @@ export interface Props {
   category: string;
   description: string;
   href?: string;
-  aspectRatio?: string;
 }
 
 const {
@@ -29,7 +15,6 @@ const {
   category,
   description,
   href,
-  aspectRatio = '4/3',
 } = Astro.props;
 
 const Tag = href ? 'a' : 'article';
@@ -39,7 +24,7 @@ const Tag = href ? 'a' : 'article';
   class="gallery-card"
   {...(href ? { href, 'aria-label': `View details: ${title}` } : {})}
 >
-  <div class="card-image-wrapper" style={`aspect-ratio: ${aspectRatio}`}>
+  <div class="card-image-wrapper">
     <img
       src={imageUrl}
       alt={imageAlt}
@@ -70,14 +55,22 @@ const Tag = href ? 'a' : 'article';
   .card-image-wrapper {
     position: relative;
     overflow: hidden;
-    margin-bottom: var(--spacing-md);
     background: var(--color-bg-alt);
+    border-radius: 2px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.04);
+    margin-bottom: var(--spacing-md);
+    transition: box-shadow 0.3s ease;
+  }
+
+  .gallery-card:hover .card-image-wrapper,
+  .gallery-card:focus-visible .card-image-wrapper {
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 2px 6px rgba(0, 0, 0, 0.06);
   }
 
   .card-image {
+    display: block;
     width: 100%;
-    height: 100%;
-    object-fit: cover;
+    height: auto;
     transition: transform 0.6s cubic-bezier(0.25, 0.1, 0.25, 1);
     will-change: transform;
   }
@@ -91,6 +84,7 @@ const Tag = href ? 'a' : 'article';
   .card-image-overlay {
     position: absolute;
     inset: 0;
+    pointer-events: none;
     background: rgba(0, 0, 0, 0);
     display: flex;
     align-items: center;
@@ -100,7 +94,7 @@ const Tag = href ? 'a' : 'article';
 
   .gallery-card:hover .card-image-overlay,
   .gallery-card:focus-visible .card-image-overlay {
-    background: rgba(0, 0, 0, 0.03);
+    background: rgba(0, 0, 0, 0.02);
   }
 
   .card-view-label {
@@ -133,6 +127,12 @@ const Tag = href ? 'a' : 'article';
     text-transform: uppercase;
     color: var(--color-text-muted);
     margin-bottom: var(--spacing-2xs);
+  }
+
+  /* Hover effect: subtle scale-up */
+  .gallery-card:hover .card-image,
+  .gallery-card:focus-visible .card-image {
+    transform: scale(1.03);
   }
 
   .card-title {
