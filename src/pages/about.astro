@@ -1,34 +1,25 @@
 ---
 /**
- * About page — Artist biography, avatar, and contact information.
- * Uses a custom avatar image from src/assets/images/avatar.jpg.
- *
- * To change the avatar:
- *   - Place a new image at src/assets/images/avatar.jpg
- *   - Rebuild
+ * About page — Artist biography (bilingual Chinese + English).
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
-import { galleryData } from '../data/gallery';
-
-// Import avatar with ?url so Astro returns a plain string path
 import avatarSrc from '../assets/images/avatar.jpg?url';
 ---
 
 <BaseLayout
   title="About"
-  description="Learn about the artist behind Yuezi Gallery — background and practice."
+  description="Learn about the artist Yuezi — background, practice, and contact."
 >
   <section class="section about-section">
     <div class="container-narrow">
+
       <!-- Avatar -->
       <div class="about-avatar-wrapper reveal">
         <img
           src={avatarSrc}
-          alt="Artist portrait"
+          alt="Yuezi"
           class="about-avatar"
-          width="400"
-          height="400"
           loading="lazy"
           decoding="async"
         />
@@ -37,34 +28,80 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
       <div class="reveal">
         <SectionTitle
           label="Biography"
-          title="About the Artist"
+          title="About"
           description=""
           align="center"
         />
       </div>
 
-      <div class="about-content reveal reveal-delay-1">
-        <p class="about-text">
-          Yuezi is a painter working across oil, acrylic, and mixed media to explore
-          the quiet spaces between colour and form — the pause before a stroke,
-          the texture of a surface at dusk, the way pigment holds memory.
-          Spanning over {galleryData[galleryData.length - 1].year - galleryData[0].year} years of practice, this
-          collection includes {galleryData.length} individual works created since {galleryData[0].year}.
+      <!-- Story: Chinese + English -->
+      <div class="about-story reveal reveal-delay-1">
+
+        <p class="about-cn">
+          Yuezi 与艺术的缘分，始于童年的涂鸦时光。那时画笔于她，不过是一件寻常玩具，尚未叩响心底的那扇门。
         </p>
-        <p class="about-text">
-          With a background in fine arts and a longstanding fascination
-          with minimal forms, the practice centers on attention: looking closely
-          at what most pass by, and translating that attention into images that
-          feel both familiar and strange.
+        <p class="about-en">
+          Yuezi's connection with art began in childhood doodles. Back then, the brush was merely a toy — it had not yet knocked on the door within.
+        </p>
+
+        <p class="about-cn">
+          大学时，她选择了历史专业。在故纸堆与旧时光中穿行，她逐渐读懂了一个道理——人类最动人的故事，往往藏在细节的褶皱里。而真正让她心潮澎湃的，却是画布上那些无需言语的诉说。她发现自己对色彩与线条的迷恋，远比想象中更深。
+        </p>
+        <p class="about-en">
+          In university, she majored in history. Wandering through archives and bygone eras, she came to understand something profound: humanity's most moving stories are often hidden in the creases of detail. Yet what stirred her heart was the wordless language of canvas. She discovered her fascination with colour and line ran far deeper than she had imagined.
+        </p>
+
+        <p class="about-cn">
+          于是她做了一个勇敢的决定：跨专业报考美术方向的研究生。虽然最终未能如愿，但那场全力以赴的奔赴，并非徒劳。备考的日子里，她系统锤炼了审美眼光，也学会了用一种更敏锐的方式观看世界——看清晨光如何在叶尖流转，读懂人物眉宇间一闪而过的情绪。
+        </p>
+        <p class="about-en">
+          So she made a courageous choice: she applied for a master's degree in fine arts despite coming from a different discipline. Though the outcome was not what she had hoped, the journey was far from wasted. During those months of preparation, she honed her aesthetic sensibility and learned to see the world with sharper eyes — how morning light moves across a leaf, how a fleeting emotion passes across a brow.
+        </p>
+
+        <p class="about-cn">
+          这段经历让她明白，有些事情的意义不在于抵达，而在于行走本身。如今的她，不再执着于某个既定的终点，而是更珍视过程中的每一份感受与沉淀。
+        </p>
+        <p class="about-en">
+          This experience taught her that the meaning of some things lies not in arrival, but in the walk itself. Today, she no longer clings to a fixed destination, but treasures every feeling and every sedimentation along the way.
+        </p>
+
+        <p class="about-cn">
+          她相信，生活从不缺少美，缺少的是停下来凝视的耐心。她带着历史的厚重与美术的轻盈，在寻常日子里打捞闪光碎片，用画笔记录当下最真实的震颤。细腻、坚韧、敏感——这些特质让她在创作中不断生长，也让她在人生的旅途上，步履不停。
+        </p>
+        <p class="about-en">
+          She believes that life is never short of beauty — only of the patience to pause and behold it. Carrying the weight of history and the lightness of art, she gathers fragments of light from ordinary days, capturing with her brush the truest tremors of the present. Delicate, resilient, perceptive — these qualities allow her to keep growing through creation, and to keep moving, step by step, on the journey of life.
+        </p>
+
+      </div>
+
+      <!-- Philosophy Section -->
+      <hr class="divider reveal" />
+
+      <div class="reveal">
+        <SectionTitle
+          label="Philosophy"
+          title="创作理念"
+          description=""
+          align="center"
+        />
+      </div>
+
+      <div class="about-philosophy reveal reveal-delay-1">
+        <p class="about-cn about-philosophy-text">
+          感受即灵感，日常即素材。在喧嚣中保持沉静，在细微处发现广阔，用绘画安放每一刻真实的触动。
+        </p>
+        <p class="about-en">
+          Feeling is inspiration; the everyday is material. Stay still amid the noise, discover vastness in the minute, and let painting hold every moment of genuine emotion.
         </p>
       </div>
 
+      <!-- Contact -->
       <hr class="divider reveal" />
 
       <div class="reveal">
         <SectionTitle
           label="Contact"
-          title="Get in Touch"
+          title="联系方式"
           description=""
           align="center"
         />
@@ -72,7 +109,7 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
 
       <div class="about-contact reveal reveal-delay-1">
         <p class="about-text about-contact-text">
-          For inquiries, commissions, or collaboration opportunities, please reach out.
+          欢迎交流与合作 / For inquiries and collaboration
         </p>
         <div class="contact-placeholder">
           <span class="contact-label">Email</span>
@@ -83,6 +120,7 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
           <span class="contact-value text-muted">Chengdu, China</span>
         </div>
       </div>
+
     </div>
   </section>
 </BaseLayout>
@@ -93,6 +131,7 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
     padding-bottom: var(--spacing-5xl);
   }
 
+  /* Avatar */
   .about-avatar-wrapper {
     width: 160px;
     height: 160px;
@@ -107,27 +146,51 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
     object-fit: cover;
   }
 
-  .about-content {
+  /* Bilingual story text */
+  .about-story {
     margin-bottom: var(--spacing-3xl);
   }
 
-  .about-text {
+  .about-cn {
     font-size: var(--font-size-base);
     line-height: var(--line-height-relaxed);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--spacing-lg);
+    color: var(--color-text);
+    margin-bottom: var(--spacing-xs);
   }
 
-  .about-text:last-child {
+  .about-en {
+    font-size: var(--font-size-sm);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--spacing-xl);
+    font-style: italic;
+  }
+
+  /* Philosophy */
+  .about-philosophy {
+    text-align: center;
+    margin-bottom: var(--spacing-3xl);
+  }
+
+  .about-philosophy-text {
+    font-size: var(--font-size-lg);
+    margin-bottom: var(--spacing-md);
+  }
+
+  .about-philosophy .about-en {
+    font-size: var(--font-size-base);
     margin-bottom: 0;
   }
 
+  /* Contact */
   .about-contact {
     text-align: center;
   }
 
   .about-contact-text {
     margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
   }
 
   .contact-placeholder {
@@ -148,5 +211,18 @@ import avatarSrc from '../assets/images/avatar.jpg?url';
 
   .contact-value {
     text-align: left;
+  }
+
+  /* Responsive */
+  @media (max-width: 640px) {
+    .about-cn {
+      font-size: var(--font-size-sm);
+    }
+    .about-en {
+      font-size: var(--font-size-xs);
+    }
+    .about-philosophy-text {
+      font-size: var(--font-size-base);
+    }
   }
 </style>

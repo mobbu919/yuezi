@@ -1,7 +1,7 @@
 ---
 /**
- * Gallery page — Full gallery grid with image preview (lightbox).
- * Each card triggers a fullscreen lightbox on click.
+ * Gallery page — Full gallery grid linking to individual artwork pages.
+ * Each card links to /gallery/{id} for full detail view.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
@@ -9,7 +9,6 @@ import GalleryCard from '../components/GalleryCard.astro';
 import Lightbox from '../components/Lightbox.astro';
 import { galleryData } from '../data/gallery';
 
-// Dynamically import all artwork images
 const imageGlob = import.meta.glob<{ default: string }>(
   '../assets/images/art-*.jpg',
   { eager: true, query: '?url' }
@@ -25,7 +24,6 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
   title="Gallery"
   description="Explore the full collection — {galleryData.length} works spanning {galleryData[0].year} to {galleryData[galleryData.length-1].year}."
 >
-  <!-- Page Header -->
   <section class="section page-header">
     <div class="container">
       <div class="reveal">
@@ -39,23 +37,20 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
     </div>
   </section>
 
-  <!-- Gallery Grid -->
   <section class="section gallery-section">
     <div class="container">
       <div class="gallery-grid">
         {galleryData.map((item, index) => {
           const imageUrl = imageByFile.get(item.file) || '';
-          const title = item.date;
-          const categories = ['Photography', 'Still Life', 'Landscape', 'Abstract', 'Portrait', 'Architecture', 'Street', 'Nature'];
-          const category = categories[index % categories.length];
           return (
-            <div class={`reveal reveal-delay-${(index % 4) + 1}`} data-lightbox="true">
+            <div class={`reveal reveal-delay-${(index % 4) + 1}`}>
               <GalleryCard
                 imageUrl={imageUrl}
-                imageAlt={`Artwork ${item.id} — ${item.date}`}
-                title={title}
-                category={category}
-                description={`Captured in ${item.date}.`}
+                imageAlt={item.title}
+                title={item.title}
+                category={item.category}
+                description={item.date}
+                href={`/gallery/${item.id}`}
               />
             </div>
           );
@@ -64,7 +59,6 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
     </div>
   </section>
 
-  <!-- Lightbox overlay for image preview -->
   <Lightbox />
 </BaseLayout>
 

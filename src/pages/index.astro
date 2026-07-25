@@ -1,10 +1,6 @@
 ---
 /**
  * Home page — Landing page with hero section and featured works.
- * Imports real artwork images via import.meta.glob.
- *
- * To update the hero or featured selection, simply change the
- * indices below and rebuild.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
@@ -12,7 +8,6 @@ import SectionTitle from '../components/SectionTitle.astro';
 import GalleryCard from '../components/GalleryCard.astro';
 import { galleryData } from '../data/gallery';
 
-// Dynamically import all artwork images
 const imageGlob = import.meta.glob<{ default: string }>(
   '../assets/images/art-*.jpg',
   { eager: true, query: '?url' }
@@ -23,11 +18,10 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
   imageByFile.set(filename, mod.default);
 }
 
-// Featured works — the 3 most recent pieces
+// Featured: 3 most recent works
 const featuredData = galleryData.slice(-3).reverse();
 const heroFile = featuredData[0]?.file || 'art-01.jpg';
 const heroImageUrl = imageByFile.get(heroFile) || '';
-// OG image for social sharing: use the latest piece
 const ogImageUrl = imageByFile.get(galleryData[galleryData.length - 1]?.file || 'art-01.jpg') || '';
 ---
 
@@ -45,30 +39,29 @@ const ogImageUrl = imageByFile.get(galleryData[galleryData.length - 1]?.file || 
     imageAlt="Latest featured artwork"
   />
 
-  <!-- Featured Works Section -->
   <section class="section featured-section">
     <div class="container">
       <div class="reveal">
         <SectionTitle
           label="Selected Works"
           title="Recent"
-          description="The latest additions to the collection — selected moments from the archive."
+          description="The latest additions to the collection."
         />
       </div>
 
       <div class="featured-grid">
         {featuredData.map((item, index) => {
           const img = imageByFile.get(item.file) || '';
-          const categories = ['Photography', 'Still Life', 'Landscape'];
           return (
             <div class={`reveal reveal-delay-${index + 1}`}>
               <GalleryCard
                 imageUrl={img}
-                imageAlt={`Featured work ${item.id}`}
-                title={item.date}
-                category={categories[index]}
-                description={`Captured in ${item.date}.`}
-                href="/gallery"
+                imageAlt={item.title}
+                title={item.title}
+                category={item.category}
+                description={item.date}
+                href={`/gallery/${item.id}`}
+                aspectRatio="4/3"
               />
             </div>
           );
