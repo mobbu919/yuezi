@@ -1,21 +1,7 @@
 ---
 /**
- * Footer — Site footer with copyright and social links.
- *
- * Props:
- *   githubUrl   — GitHub profile URL (default: placeholder)
- *   instagramUrl — Instagram profile URL (default: placeholder)
+ * Footer — Site footer with copyright.
  */
-
-export interface Props {
-  githubUrl?: string;
-  instagramUrl?: string;
-}
-
-const {
-  githubUrl = 'https://github.com',
-  instagramUrl = 'https://instagram.com',
-} = Astro.props;
 
 const currentYear = new Date().getFullYear();
 ---
@@ -23,33 +9,9 @@ const currentYear = new Date().getFullYear();
 <footer class="footer" role="contentinfo">
   <div class="container">
     <div class="footer-inner">
-      <!-- Copyright -->
       <p class="footer-copyright">
         &copy; {currentYear} Yuezi Gallery. All rights reserved.
       </p>
-
-      <!-- Social Links -->
-      <div class="footer-links">
-        <a
-          href={githubUrl}
-          class="footer-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="GitHub"
-        >
-          GitHub
-        </a>
-        <span class="footer-separator" aria-hidden="true">/</span>
-        <a
-          href={instagramUrl}
-          class="footer-link"
-          target="_blank"
-          rel="noopener noreferrer"
-          aria-label="Instagram"
-        >
-          Instagram
-        </a>
-      </div>
     </div>
   </div>
 </footer>
@@ -63,43 +25,12 @@ const currentYear = new Date().getFullYear();
 
   .footer-inner {
     display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: var(--spacing-md);
+    justify-content: center;
     text-align: center;
   }
 
   .footer-copyright {
     font-size: var(--font-size-sm);
     color: var(--color-text-muted);
-  }
-
-  .footer-links {
-    display: flex;
-    align-items: center;
-    gap: var(--spacing-sm);
-  }
-
-  .footer-link {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-secondary);
-    transition: color var(--transition-fast);
-  }
-
-  .footer-link:hover {
-    color: var(--color-text);
-  }
-
-  .footer-separator {
-    color: var(--color-border);
-    font-size: var(--font-size-sm);
-  }
-
-  @media (min-width: 768px) {
-    .footer-inner {
-      flex-direction: row;
-      justify-content: space-between;
-      text-align: left;
-    }
   }
 </style>
