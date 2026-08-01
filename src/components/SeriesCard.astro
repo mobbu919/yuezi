@@ -1,57 +1,34 @@
 ---
 /**
- * SeriesCard — A series overview card with 3x3 mosaic thumbnail cover.
+ * SeriesCard — A series overview card with a pre-rendered 3x3 mosaic cover.
  *
- * Design: the top-level cover uses a 3x3 grid of the first 9 works in the
- * series, showing the visual character of the collection at a glance.
- * If the series has fewer than 9 works, the remaining cells show a count tile.
+ * The mosaic cover is generated at build time by scripts/generate-covers.mjs
+ * into a SINGLE image at /covers/{slug}.jpg, so the gallery overview page
+ * only loads 5 images total instead of 45 thumbnails.
  *
  * Props:
  *   series  — Series object from src/data/series.js
- *   images  — Map of filename → processed image URL
  */
 
 export interface Props {
   series: any;
-  images: Map<string, string>;
 }
 
-const { series, images } = Astro.props;
-
-// First 9 works for the mosaic cover
-const coverWorks = series.works.slice(0, 9);
-const remaining = series.works.length - coverWorks.length;
+const { series } = Astro.props;
+const coverUrl = `/covers/${series.slug}.jpg`;
 ---
 
 <a href={`/gallery/${series.slug}`} class="series-card" aria-label={`View series: ${series.name}`}>
 
-  <!-- Mosaic cover -->
+  <!-- Single pre-rendered mosaic cover -->
   <div class="series-cover">
-    <div class="series-mosaic">
-      {coverWorks.map((work, index) => {
-        const src = images.get(work.file) || '';
-        return (
-          <div class="series-mosaic-cell" data-index={index}>
-            <img
-              src={src}
-              alt={work.title}
-              class="series-mosaic-img"
-              loading="lazy"
-              decoding="async"
-            />
-          </div>
-        );
-      })}
-
-      <!-- Fill remaining cells with a count tile -->
-      {Array.from({ length: Math.max(0, 9 - coverWorks.length) }).map((_, i) => (
-        <div class="series-mosaic-cell series-mosaic-count" data-index={coverWorks.length + i}>
-          <span class="series-count-label">
-            {remaining > 0 ? `${remaining}+` : ''}
-          </span>
-        </div>
-      ))}
-    </div>
+    <img
+      src={coverUrl}
+      alt={`${series.name} series cover`}
+      class="series-cover-img"
+      loading="lazy"
+      decoding="async"
+    />
 
     <!-- Hover overlay -->
     <div class="series-overlay" aria-hidden="true">
@@ -83,45 +60,19 @@ const remaining = series.works.length - coverWorks.length;
     position: relative;
     overflow: hidden;
     margin-bottom: var(--spacing-md);
-    background: var(--color-bg-alt);
-  }
-
-  .series-mosaic {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
     aspect-ratio: 1 / 1;
-    gap: 2px;
-    padding: 2px;
-  }
-
-  .series-mosaic-cell {
-    position: relative;
-    overflow: hidden;
     background: var(--color-bg-alt);
   }
 
-  .series-mosaic-img {
+  .series-cover-img {
     width: 100%;
     height: 100%;
     object-fit: cover;
     transition: transform 0.5s cubic-bezier(0.25, 0.1, 0.25, 1);
   }
 
-  .series-card:hover .series-mosaic-img {
-    transform: scale(1.06);
-  }
-
-  /* Count tile for series with < 9 works */
-  .series-mosaic-count {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--color-bg-alt);
-  }
-
-  .series-count-label {
-    font-size: var(--font-size-sm);
-    color: var(--color-text-muted);
+  .series-card:hover .series-cover-img {
+    transform: scale(1.03);
   }
 
   /* Hover overlay */

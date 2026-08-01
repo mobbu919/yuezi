@@ -7,4 +7,3 @@ dist/
 src/assets/images_backup/
 src/data/*.bak
 __pycache__/
-scripts/

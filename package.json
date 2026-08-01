@@ -2,11 +2,12 @@
   "name": "yuezi-gallery",
   "type": "module",
   "version": "1.0.0",
-  "description": "Art Gallery — A minimalist personal portfolio website built with Astro.",
+  "description": "Art Gallery \u2014 A minimalist personal portfolio website built with Astro.",
   "private": true,
   "scripts": {
     "dev": "astro dev",
-    "build": "ASTRO_TELEMETRY_DISABLED=1 astro build",
+    "prebuild": "node scripts/generate-covers.mjs",
+    "build": "astro build",
     "preview": "astro preview"
   },
   "dependencies": {
