@@ -1,0 +1,147 @@
+---
+/**
+ * Series detail page — shows every work inside one series.
+ * URL: /gallery/{series-slug}
+ */
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import GalleryCard from '../../../components/GalleryCard.astro';
+import { seriesData } from '../../../data/series';
+
+// Static paths for all series
+export function getStaticPaths() {
+  return seriesData.map((series) => ({
+    params: { series: series.slug },
+    props: { series },
+  }));
+}
+
+export interface Props {
+  series: typeof seriesData[number];
+}
+
+const { series } = Astro.props;
+
+// Import all images for this series
+const imageGlob = import.meta.glob<{ default: string }>(
+  '../../../assets/images/*/*.jpg',
+  { eager: true, query: '?url' }
+);
+const imageMap = new Map<string, string>();
+for (const [filepath, mod] of Object.entries(imageGlob)) {
+  const match = filepath.match(new RegExp(`${series.slug}/([^/]+)$`));
+  if (match) {
+    imageMap.set(match[1], mod.default);
+  }
+}
+---
+
+<BaseLayout
+  title={series.name}
+  description={`${series.name} — ${series.description}`}
+>
+  <section class="section series-header">
+    <div class="container-narrow">
+      <div class="reveal">
+        <nav class="series-breadcrumb" aria-label="Breadcrumb">
+          <a href="/gallery" class="series-back">Gallery</a>
+          <span class="series-sep" aria-hidden="true">/</span>
+          <span class="series-current">{series.name}</span>
+        </nav>
+
+        <span class="label series-order-label">Series {series.order} — {series.works.length} Works</span>
+        <h1 class="heading-1 series-title">{series.name}</h1>
+        <p class="series-description-lead">{series.description}</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section series-works-section">
+    <div class="container">
+      <div class="works-grid">
+        {series.works.map((work, index) => {
+          const imageUrl = imageMap.get(work.file) || '';
+          return (
+            <div class={`reveal reveal-delay-${(index % 3) + 1}`}>
+              <GalleryCard
+                imageUrl={imageUrl}
+                imageAlt={work.title}
+                title={work.title}
+                category={work.material}
+                description={work.date}
+                href={`/gallery/${series.slug}/${work.id}`}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .series-header {
+    padding-bottom: var(--spacing-2xl);
+  }
+
+  .series-breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: var(--spacing-xs);
+    margin-bottom: var(--spacing-2xl);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-muted);
+  }
+
+  .series-back {
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-border);
+    transition: color var(--transition-fast);
+  }
+
+  .series-back:hover {
+    color: var(--color-text);
+  }
+
+  .series-sep { color: var(--color-border); }
+  .series-current { color: var(--color-text-muted); }
+
+  .series-order-label {
+    display: inline-block;
+    margin-bottom: var(--spacing-md);
+  }
+
+  .series-title {
+    margin-bottom: var(--spacing-md);
+  }
+
+  .series-description-lead {
+    font-size: var(--font-size-lg);
+    line-height: var(--line-height-relaxed);
+    color: var(--color-text-secondary);
+    max-width: 520px;
+  }
+
+  .series-works-section {
+    padding-top: var(--spacing-2xl);
+  }
+
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: var(--spacing-2xl);
+  }
+
+  @media (min-width: 640px) {
+    .works-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .works-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+</style>

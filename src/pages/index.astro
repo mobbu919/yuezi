@@ -1,38 +1,54 @@
 ---
 /**
- * Home page — Landing page with hero section and featured works.
+ * Home page — Hero + featured works from the collections.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import SectionTitle from '../components/SectionTitle.astro';
 import GalleryCard from '../components/GalleryCard.astro';
-import { galleryData } from '../data/gallery';
+import { seriesData } from '../data/series';
 
+// Import all images from all series
 const imageGlob = import.meta.glob<{ default: string }>(
-  '../assets/images/art-*.jpg',
+  '../assets/images/*/*.jpg',
   { eager: true, query: '?url' }
 );
-const imageByFile = new Map<string, string>();
-for (const [filepath, mod] of Object.entries(imageGlob)) {
-  const filename = filepath.split('/').pop() || '';
-  imageByFile.set(filename, mod.default);
+
+function findImage(slug: string, file: string): string {
+  for (const [filepath, mod] of Object.entries(imageGlob)) {
+    if (filepath.includes(`${slug}/${file}`)) {
+      return mod.default;
+    }
+  }
+  return '';
 }
 
-// Featured: 3 most recent works
-const featuredData = galleryData.slice(-3).reverse();
-const heroFile = featuredData[0]?.file || 'art-01.jpg';
-const heroImageUrl = imageByFile.get(heroFile) || '';
-const ogImageUrl = imageByFile.get(galleryData[galleryData.length - 1]?.file || 'art-01.jpg') || '';
+// Featured: last work of each series (5 pieces total)
+const featured = seriesData
+  .map((series) => ({
+    series,
+    work: series.works[series.works.length - 1],
+  }))
+  .reverse();
+
+// Hero image: latest work from the first series
+const heroTarget = featured[0];
+const heroFile = heroTarget?.work.file || '';
+const heroImageUrl = heroTarget ? findImage(heroTarget.series.slug, heroFile) : '';
+
+// OG image for social sharing
+const ogTarget = seriesData[seriesData.length - 1];
+const ogImageUrl = ogTarget ? findImage(ogTarget.slug, ogTarget.works[ogTarget.works.length - 1].file) : '';
 ---
 
 <BaseLayout
   title="Home"
-  description="Yuezi Gallery — A curated space for visual stories and quiet impressions."
+  description="Yuezi Gallery — 悦子的作品集. Five series of paintings, watercolours, and mixed media."
   ogImage={ogImageUrl}
 >
   <Hero
     title="Yuezi Gallery"
-    subtitle="A curated space for visual stories and quiet impressions"
+    subtitle="悦子的作品集 — A quiet conversation between colour, texture, and memory"
     ctaText="Explore"
     ctaHref="/gallery"
     imageUrl={heroImageUrl}
@@ -44,23 +60,23 @@ const ogImageUrl = imageByFile.get(galleryData[galleryData.length - 1]?.file || 
       <div class="reveal">
         <SectionTitle
           label="Selected Works"
-          title="Recent"
-          description="The latest additions to the collection."
+          title="Featured"
+          description="One recent work from each collection."
         />
       </div>
 
       <div class="featured-grid">
-        {featuredData.map((item, index) => {
-          const img = imageByFile.get(item.file) || '';
+        {featured.map((item, index) => {
+          const img = findImage(item.series.slug, item.work.file);
           return (
             <div class={`reveal reveal-delay-${index + 1}`}>
               <GalleryCard
                 imageUrl={img}
-                imageAlt={item.title}
-                title={item.title}
-                category={item.category}
-                description={item.date}
-                href={`/gallery/${item.id}`}
+                imageAlt={item.work.title}
+                title={item.work.title}
+                category={item.series.name}
+                description={`${item.work.material} · ${item.work.date}`}
+                href={`/gallery/${item.series.slug}/${item.work.id}`}
                 aspectRatio="4/3"
               />
             </div>
@@ -69,7 +85,7 @@ const ogImageUrl = imageByFile.get(galleryData[galleryData.length - 1]?.file || 
       </div>
 
       <div class="featured-cta reveal">
-        <a href="/gallery" class="btn">View All {galleryData.length} Works</a>
+        <a href="/gallery" class="btn">View All Collections</a>
       </div>
     </div>
   </section>

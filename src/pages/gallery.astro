@@ -1,36 +1,43 @@
 ---
 /**
- * Gallery page — Full gallery grid linking to individual artwork pages.
- * Each card links to /gallery/{id} for full detail view.
+ * Gallery page — Series overview.
+ * Displays all 5 series as cards with 3x3 mosaic covers.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import SectionTitle from '../components/SectionTitle.astro';
-import GalleryCard from '../components/GalleryCard.astro';
-import Lightbox from '../components/Lightbox.astro';
-import { galleryData } from '../data/gallery';
+import SeriesCard from '../components/SeriesCard.astro';
+import { seriesData } from '../data/series';
 
+// Import all images from all series directories
 const imageGlob = import.meta.glob<{ default: string }>(
-  '../assets/images/art-*.jpg',
+  '../assets/images/*/*.jpg',
   { eager: true, query: '?url' }
 );
-const imageByFile = new Map<string, string>();
-for (const [filepath, mod] of Object.entries(imageGlob)) {
-  const filename = filepath.split('/').pop() || '';
-  imageByFile.set(filename, mod.default);
+
+// Build a map per series: filename -> URL
+function buildSeriesImageMap(slug: string): Map<string, string> {
+  const map = new Map<string, string>();
+  for (const [filepath, mod] of Object.entries(imageGlob)) {
+    const match = filepath.match(new RegExp(`${slug}/([^/]+)$`));
+    if (match) {
+      map.set(match[1], mod.default);
+    }
+  }
+  return map;
 }
 ---
 
 <BaseLayout
   title="Gallery"
-  description="Explore the full collection — {galleryData.length} works spanning {galleryData[0].year} to {galleryData[galleryData.length-1].year}."
+  description="Yuezi's portfolio — 5 series, 67 works spanning painting, watercolour, and mixed media."
 >
   <section class="section page-header">
     <div class="container">
       <div class="reveal">
         <SectionTitle
-          label={`Exhibition — ${galleryData.length} Works`}
+          label={`Collections — ${seriesData.length} Series`}
           title="Gallery"
-          description={`A curated collection spanning from ${galleryData[0].date.toLowerCase()} to ${galleryData[galleryData.length-1].date.toLowerCase()}.`}
+          description="Explore the collections — each series is a chapter of an ongoing visual conversation."
           align="left"
         />
       </div>
@@ -39,27 +46,18 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
 
   <section class="section gallery-section">
     <div class="container">
-      <div class="gallery-grid">
-        {galleryData.map((item, index) => {
-          const imageUrl = imageByFile.get(item.file) || '';
+      <div class="series-grid">
+        {seriesData.map((series, index) => {
+          const imageMap = buildSeriesImageMap(series.slug);
           return (
-            <div class={`reveal reveal-delay-${(index % 4) + 1}`}>
-              <GalleryCard
-                imageUrl={imageUrl}
-                imageAlt={item.title}
-                title={item.title}
-                category={item.category}
-                description={item.date}
-                href={`/gallery/${item.id}`}
-              />
+            <div class={`reveal reveal-delay-${(index % 3) + 1}`}>
+              <SeriesCard series={series} images={imageMap} />
             </div>
           );
         })}
       </div>
     </div>
   </section>
-
-  <Lightbox />
 </BaseLayout>
 
 <style>
@@ -71,20 +69,20 @@ for (const [filepath, mod] of Object.entries(imageGlob)) {
     padding-top: var(--spacing-2xl);
   }
 
-  .gallery-grid {
+  .series-grid {
     display: grid;
     grid-template-columns: 1fr;
-    gap: var(--spacing-2xl);
+    gap: var(--spacing-3xl) var(--spacing-2xl);
   }
 
   @media (min-width: 640px) {
-    .gallery-grid {
+    .series-grid {
       grid-template-columns: repeat(2, 1fr);
     }
   }
 
   @media (min-width: 1024px) {
-    .gallery-grid {
+    .series-grid {
       grid-template-columns: repeat(3, 1fr);
     }
   }
